@@ -21,7 +21,7 @@ export function TrendChart() {
                 <YAxis stroke="#6B7280" fontSize={12} />
                 <Tooltip
                   contentStyle={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8 }}
-                  formatter={(value: number) => [`${value.toFixed(1)} kg`, "CO₂"]}
+                  formatter={(value) => [`${Number(value).toFixed(1)} kg`, "CO₂"]}
                 />
                 <Bar dataKey="co2Kg" fill="#16A34A" radius={[6, 6, 0, 0]} />
               </BarChart>
