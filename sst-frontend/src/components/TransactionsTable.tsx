@@ -108,10 +108,15 @@ export function TransactionsTable() {
               )}
               {txns.data?.content.map((t) => (
                 <TableRow key={t.id}>
-                  <TableCell className="font-mono text-xs">{t.date}</TableCell>
-                  <TableCell>{t.description}</TableCell>
+                  <TableCell className="font-mono text-xs">{t.date.slice(0, 10)}</TableCell>
+                  <TableCell>
+                    <div className="font-medium">{t.merchantName ?? t.description}</div>
+                    {t.merchantName && (
+                      <div className="text-xs text-muted-foreground">{t.description}</div>
+                    )}
+                  </TableCell>
                   <TableCell className="text-muted-foreground">{t.category}</TableCell>
-                  <TableCell className="text-right font-medium">{t.amountEur.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">{t.amount.toFixed(2)}</TableCell>
                   <TableCell className="text-right">{t.co2Kg.toFixed(2)}</TableCell>
                   <TableCell className="text-right"><EsgBadge score={t.esgScore} /></TableCell>
                 </TableRow>

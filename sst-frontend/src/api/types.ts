@@ -18,10 +18,12 @@ export interface CategorySummary {
 
 export interface Transaction {
   id: string
-  date: string         // ISO date
+  date: string         // ISO datetime
   description: string
+  merchantName?: string
   category: string
-  amountEur: number
+  amount: number       // EUR
+  currency?: string
   co2Kg: number
   esgScore: number
 }
