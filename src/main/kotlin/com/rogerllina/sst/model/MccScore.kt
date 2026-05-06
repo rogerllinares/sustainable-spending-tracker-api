@@ -9,6 +9,6 @@ data class MccScore(
     @Id val mccCode: String,
     val category: String,
     val description: String,
-    val co2PerEur: BigDecimal,
+    @Column(name = "co2_per_eur") val co2PerEur: BigDecimal,
     val esgScore: Int
 )

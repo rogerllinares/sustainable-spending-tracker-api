@@ -21,6 +21,6 @@ data class Transaction(
     val merchantName: String,
     val category: String,
     val description: String,
-    val co2Kg: BigDecimal,
+    @Column(name = "co2_kg") val co2Kg: BigDecimal,
     val esgScore: Int
 )
