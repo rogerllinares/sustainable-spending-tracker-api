@@ -85,6 +85,7 @@ class TransactionServiceTest {
             category = "Food"
         )
 
+        every { transactionRepository.count() } returns 0L
         every { mockBankService.getAccounts() } returns listOf(bankAccount)
         every { mockBankService.getTransactions() } returns listOf(bankTx1, bankTx2)
         every { accountRepository.findById(testAccount.id) } returns Optional.of(testAccount)
@@ -99,6 +100,16 @@ class TransactionServiceTest {
         assertEquals(2, count)
         verify(exactly = 1) { transactionRepository.saveAll(any<List<Transaction>>()) }
         assertEquals(2, savedSlot.captured.size)
+    }
+
+    @Test
+    fun `seedFromMock is idempotent — skips when transactions already exist`() {
+        every { transactionRepository.count() } returns 5L
+
+        val count = service.seedFromMock()
+
+        assertEquals(0, count)
+        verify(exactly = 0) { transactionRepository.saveAll(any<List<Transaction>>()) }
     }
 
     @Test

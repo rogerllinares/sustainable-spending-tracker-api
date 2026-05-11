@@ -34,6 +34,9 @@ class TransactionService(
 
     @Transactional
     fun seedFromMock(): Int {
+        if (transactionRepository.count() > 0) {
+            return 0
+        }
         val accounts = mockBankService.getAccounts().map { bankAccount ->
             val uuid = UUID.fromString(bankAccount.id)
             accountRepository.findById(uuid).orElseGet {
@@ -48,16 +51,13 @@ class TransactionService(
                 )
             }
         }
-        val accountById = accounts.associateBy { it.id }
         val primaryAccount = accounts.first()
 
         val transactions = mockBankService.getTransactions().map { bankTx ->
             val esgResult = esgScoringService.score(bankTx.mccCode, bankTx.amount)
             val mcc = mccScoreRepository.findById(bankTx.mccCode).orElse(fallbackMcc)
-            val account = runCatching { UUID.fromString(bankTx.id) }
-                .getOrNull()
-                ?.let { accountById[it] }
-                ?: primaryAccount
+            // All mock transactions belong to the primary account.
+            val account = primaryAccount
 
             Transaction(
                 account = account,
