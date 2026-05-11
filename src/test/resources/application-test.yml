@@ -10,3 +10,6 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     locations: classpath:db/migration
+
+admin:
+  token: test-admin-token

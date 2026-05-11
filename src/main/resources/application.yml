@@ -22,3 +22,6 @@ springdoc:
 
 cors:
   allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+
+admin:
+  token: ${ADMIN_TOKEN:}
