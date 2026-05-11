@@ -2,16 +2,24 @@
 
 Portfolio app — connects bank transactions and computes per-purchase CO₂ footprint and ESG score. Built as a portfolio piece for Clarity AI.
 
+## Live
+
+- **Frontend:** https://sst-frontend-steel.vercel.app
+- **API:** https://sst-api-hxmn.onrender.com (Swagger: `/swagger-ui.html`)
+- **DB:** Supabase Postgres (eu-central-1, pooler `aws-1-eu-central-1`)
+
+> Render free tier sleeps after 15 min idle — first request after a cold start takes ~50s.
+
 ## Stack
 
 - **Backend:** Kotlin · Spring Boot 3.5 · PostgreSQL · Flyway · TDD with MockK
 - **Frontend:** React 18 · TypeScript · Vite · Tailwind · shadcn/ui · Recharts · TanStack Query
 - **Auth:** Mock login form (portfolio demo). Architecture is OAuth-ready — see *Possible improvements*.
-- **Infra:** Docker · docker-compose
+- **Infra:** Docker · Vercel (frontend) · Render (backend) · Supabase (DB)
 
 ## Screenshots
 
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](docs/screenshots/sst-dashboard-prod.png)
 
 ## Run locally
 
