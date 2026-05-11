@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { useDashboardSummary } from "@/api/dashboard"
 
@@ -13,6 +14,16 @@ export function TrendChart() {
         <div className="h-72 w-full">
           {summary.isLoading ? (
             <div className="h-full w-full bg-muted/30 animate-pulse rounded" />
+          ) : summary.isError ? (
+            <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-center">
+              <p className="text-sm text-destructive">Couldn't load the trend.</p>
+              <p className="text-xs text-muted-foreground">
+                The backend may be cold-starting (free tier). It usually wakes up in ~50 seconds.
+              </p>
+              <Button variant="outline" size="sm" onClick={() => summary.refetch()}>
+                Retry
+              </Button>
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={summary.data?.monthlyTrend ?? []} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
