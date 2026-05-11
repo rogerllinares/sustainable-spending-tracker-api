@@ -6,11 +6,13 @@ export interface MonthlyTrendPoint {
 export interface DashboardSummary {
   totalCo2Kg: number
   avgEsgScore: number
+  transactionCount: number
   monthlyTrend: MonthlyTrendPoint[]
 }
 
 export interface CategorySummary {
   category: string
+  totalSpend: number
   totalCo2Kg: number
   avgEsgScore: number
   transactionCount: number
