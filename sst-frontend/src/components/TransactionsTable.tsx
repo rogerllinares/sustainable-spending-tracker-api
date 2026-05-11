@@ -30,61 +30,78 @@ export function TransactionsTable() {
       <CardContent className="p-6">
         <h2 className="text-lg font-semibold text-foreground mb-4">Transactions</h2>
 
-        <div className="flex flex-wrap gap-3 mb-4">
-          <select
-            className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-            value={filters.category ?? ""}
-            onChange={(e) => update({ category: e.target.value || undefined })}
-          >
-            <option value="">All categories</option>
-            {categories.data?.map((c) => (
-              <option key={c.category} value={c.category}>{c.category}</option>
-            ))}
-          </select>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4 items-end">
+          <div className="col-span-2 md:col-span-1">
+            <label className="text-xs text-muted-foreground mb-1 block">Category</label>
+            <select
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              value={filters.category ?? ""}
+              onChange={(e) => update({ category: e.target.value || undefined })}
+            >
+              <option value="">All</option>
+              {categories.data?.map((c) => (
+                <option key={c.category} value={c.category}>{c.category}</option>
+              ))}
+            </select>
+          </div>
 
-          <Input
-            type="date"
-            value={filters.dateFrom ?? ""}
-            onChange={(e) => update({ dateFrom: e.target.value || undefined })}
-            className="h-9 w-40"
-          />
-          <Input
-            type="date"
-            value={filters.dateTo ?? ""}
-            onChange={(e) => update({ dateTo: e.target.value || undefined })}
-            className="h-9 w-40"
-          />
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">From</label>
+            <Input
+              type="date"
+              value={filters.dateFrom ?? ""}
+              onChange={(e) => update({ dateFrom: e.target.value || undefined })}
+              className="h-9 w-full"
+            />
+          </div>
 
-          <Input
-            type="number"
-            placeholder="Min ESG"
-            min={0}
-            max={100}
-            value={filters.minScore ?? ""}
-            onChange={(e) =>
-              update({ minScore: e.target.value === "" ? undefined : Number(e.target.value) })
-            }
-            className="h-9 w-24"
-          />
-          <Input
-            type="number"
-            placeholder="Max ESG"
-            min={0}
-            max={100}
-            value={filters.maxScore ?? ""}
-            onChange={(e) =>
-              update({ maxScore: e.target.value === "" ? undefined : Number(e.target.value) })
-            }
-            className="h-9 w-24"
-          />
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">To</label>
+            <Input
+              type="date"
+              value={filters.dateTo ?? ""}
+              onChange={(e) => update({ dateTo: e.target.value || undefined })}
+              className="h-9 w-full"
+            />
+          </div>
 
-          <Button
-            variant="outline"
-            onClick={() => setFilters({ page: 0, size: PAGE_SIZE })}
-            className="h-9"
-          >
-            Reset
-          </Button>
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">Min ESG</label>
+            <Input
+              type="number"
+              min={0}
+              max={100}
+              value={filters.minScore ?? ""}
+              onChange={(e) =>
+                update({ minScore: e.target.value === "" ? undefined : Number(e.target.value) })
+              }
+              className="h-9 w-full"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">Max ESG</label>
+            <Input
+              type="number"
+              min={0}
+              max={100}
+              value={filters.maxScore ?? ""}
+              onChange={(e) =>
+                update({ maxScore: e.target.value === "" ? undefined : Number(e.target.value) })
+              }
+              className="h-9 w-full"
+            />
+          </div>
+
+          <div className="col-span-2 md:col-span-1">
+            <Button
+              variant="outline"
+              onClick={() => setFilters({ page: 0, size: PAGE_SIZE })}
+              className="h-9 w-full"
+            >
+              Reset
+            </Button>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -103,10 +120,19 @@ export function TransactionsTable() {
               {txns.isLoading && (
                 <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">Loading…</TableCell></TableRow>
               )}
-              {txns.data?.content.length === 0 && (
+              {txns.isError && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8">
+                    <p className="text-sm text-destructive mb-2">Couldn't load transactions.</p>
+                    <p className="text-xs text-muted-foreground mb-3">Backend may be cold-starting (~50s).</p>
+                    <Button variant="outline" size="sm" onClick={() => txns.refetch()}>Retry</Button>
+                  </TableCell>
+                </TableRow>
+              )}
+              {!txns.isLoading && !txns.isError && txns.data?.content.length === 0 && (
                 <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No transactions match these filters.</TableCell></TableRow>
               )}
-              {txns.data?.content.map((t) => (
+              {!txns.isError && txns.data?.content.map((t) => (
                 <TableRow key={t.id}>
                   <TableCell className="font-mono text-xs">{t.date.slice(0, 10)}</TableCell>
                   <TableCell>
