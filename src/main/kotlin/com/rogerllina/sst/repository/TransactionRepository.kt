@@ -13,11 +13,11 @@ interface TransactionRepository : JpaRepository<Transaction, UUID> {
 
     @Query("""
         SELECT t FROM Transaction t
-        WHERE (:category IS NULL OR t.category = :category)
-          AND (:dateFrom IS NULL OR t.date >= :dateFrom)
-          AND (:dateTo   IS NULL OR t.date <= :dateTo)
-          AND (:minScore IS NULL OR t.esgScore >= :minScore)
-          AND (:maxScore IS NULL OR t.esgScore <= :maxScore)
+        WHERE (CAST(:category AS string)            IS NULL OR t.category = :category)
+          AND (CAST(:dateFrom AS timestamp)         IS NULL OR t.date >= :dateFrom)
+          AND (CAST(:dateTo   AS timestamp)         IS NULL OR t.date <= :dateTo)
+          AND (CAST(:minScore AS integer)           IS NULL OR t.esgScore >= :minScore)
+          AND (CAST(:maxScore AS integer)           IS NULL OR t.esgScore <= :maxScore)
         ORDER BY t.date DESC
     """)
     fun findFiltered(
