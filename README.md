@@ -1,16 +1,18 @@
 # Sustainable Spending Tracker (SST)
 
-**Status:** shipped (2026-05-12) — frontend + backend live, audits passed (UI/Code/CSO/SEO + Karpathy).
+Turn bank transactions into a carbon footprint + ESG score per purchase. Full-stack portfolio piece — Kotlin/Spring Boot backend, React/TypeScript dashboard, deployed on Render + Vercel + Supabase.
 
-Portfolio app — connects bank transactions and computes per-purchase CO₂ footprint and ESG score. Built as a portfolio piece for Clarity AI.
+**▶ Live demo: https://sst-frontend-steel.vercel.app** *(use any name + email to log in)*
 
-## Live
+> ⏱ **Cold start:** Render free tier sleeps after 15 min idle. The first request after a cold start takes ~50s — the dashboard shows a skeleton while it wakes up.
+
+**Status:** shipped (2026-05-12) — frontend + backend live, 4-dimension audits passed (UI/Code/CSO/SEO + Karpathy), 14/14 backend tests green.
+
+## Endpoints
 
 - **Frontend:** https://sst-frontend-steel.vercel.app
 - **API:** https://sst-api-hxmn.onrender.com (Swagger: `/swagger-ui.html`)
 - **DB:** Supabase Postgres (eu-central-1, pooler `aws-1-eu-central-1`)
-
-> Render free tier sleeps after 15 min idle — first request after a cold start takes ~50s.
 
 ## Stack
 
@@ -22,6 +24,22 @@ Portfolio app — connects bank transactions and computes per-purchase CO₂ foo
 ## Screenshots
 
 ![Dashboard](docs/screenshots/sst-dashboard-prod.png)
+
+## How ESG and CO₂ are computed
+
+Every transaction has a **Merchant Category Code (MCC)** — the same 4-digit code Visa/Mastercard use to classify merchants (5411 = grocery, 5541 = gas stations, etc.). At seed time the DB is preloaded with a small `mcc_score` table mapping each MCC to:
+
+- `co2_per_eur` — kg of CO₂ emitted per euro spent in that category (sourced from public emission-factor datasets, illustrative not authoritative)
+- `esg_score` — 0–100 sustainability score for the category
+
+When a transaction arrives, the backend looks up its MCC and computes:
+
+```
+co2_kg = amount_eur × co2_per_eur     (rounded to 3 decimals)
+esg_score = mcc.esg_score             (50 default if MCC unknown)
+```
+
+See [`EsgScoringService.kt`](src/main/kotlin/com/rogerllina/sst/service/EsgScoringService.kt) and the seed migration in [`db/migration/`](src/main/resources/db/migration/). The methodology is deliberately simple — the goal is to demonstrate the end-to-end pipeline (transaction ingest → categorisation → aggregation → dashboard), not to publish carbon estimates. Real-world products would layer in merchant-level overrides, currency conversion, and audited emission factors.
 
 ## Run locally
 
@@ -76,7 +94,7 @@ sst/
 ## Possible improvements
 
 - **Real auth:** replace the mock login form with OAuth (Google, GitHub). The `AuthContext` and Bearer interceptor are already wired — only `LoginPage` and a backend Spring Security Resource Server need swapping in. The plan is to port the OAuth flow from the `Apostes Automatitzades` project once that ships.
-- Make `POST /api/admin/seed` idempotent (currently duplicates on repeated calls).
-- Move dashboard aggregation from in-memory to SQL `GROUP BY`.
+- Move dashboard aggregation from in-memory to SQL `GROUP BY` (current implementation is correct but does not scale beyond ~10k transactions).
 - Dark mode toggle + mobile-first responsive review.
-- Code-split Recharts bundle (currently ~676KB gzipped).
+- Code-split the Recharts bundle (currently ~676 KB gzipped).
+- Real emission factors via an audited dataset (e.g. Carbon Cloud, Klima) and merchant-level overrides instead of MCC-only.
