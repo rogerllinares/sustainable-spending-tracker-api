@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
 import org.springframework.web.filter.OncePerRequestFilter
+import java.security.MessageDigest
 import java.time.Duration
 
 @Configuration
@@ -28,8 +29,10 @@ class SecurityConfig(
             filterChain: FilterChain
         ) {
             if (request.requestURI.startsWith("/api/admin/")) {
-                val provided = request.getHeader("X-Admin-Token")
-                if (adminToken.isBlank() || provided != adminToken) {
+                val provided = request.getHeader("X-Admin-Token") ?: ""
+                val a = provided.toByteArray(Charsets.UTF_8)
+                val b = adminToken.toByteArray(Charsets.UTF_8)
+                if (adminToken.isBlank() || !MessageDigest.isEqual(a, b)) {
                     response.status = HttpStatus.UNAUTHORIZED.value()
                     response.contentType = "application/json"
                     response.writer.write("""{"error":"unauthorized"}""")
