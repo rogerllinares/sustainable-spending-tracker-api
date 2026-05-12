@@ -32,8 +32,10 @@ export function TransactionsTable() {
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4 items-end">
           <div className="col-span-2 md:col-span-1">
-            <label className="text-xs text-muted-foreground mb-1 block">Category</label>
+            <label htmlFor="filter-category" className="text-xs text-muted-foreground mb-1 block">Category</label>
             <select
+              id="filter-category"
+              aria-label="Filter by category"
               className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={filters.category ?? ""}
               onChange={(e) => update({ category: e.target.value || undefined })}
@@ -46,8 +48,10 @@ export function TransactionsTable() {
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">From</label>
+            <label htmlFor="filter-date-from" className="text-xs text-muted-foreground mb-1 block">From</label>
             <Input
+              id="filter-date-from"
+              aria-label="Filter from date"
               type="date"
               value={filters.dateFrom ?? ""}
               onChange={(e) => update({ dateFrom: e.target.value || undefined })}
@@ -56,8 +60,10 @@ export function TransactionsTable() {
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">To</label>
+            <label htmlFor="filter-date-to" className="text-xs text-muted-foreground mb-1 block">To</label>
             <Input
+              id="filter-date-to"
+              aria-label="Filter to date"
               type="date"
               value={filters.dateTo ?? ""}
               onChange={(e) => update({ dateTo: e.target.value || undefined })}
@@ -66,8 +72,10 @@ export function TransactionsTable() {
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Min ESG</label>
+            <label htmlFor="filter-min-esg" className="text-xs text-muted-foreground mb-1 block">Min ESG</label>
             <Input
+              id="filter-min-esg"
+              aria-label="Minimum ESG score"
               type="number"
               min={0}
               max={100}
@@ -80,8 +88,10 @@ export function TransactionsTable() {
           </div>
 
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Max ESG</label>
+            <label htmlFor="filter-max-esg" className="text-xs text-muted-foreground mb-1 block">Max ESG</label>
             <Input
+              id="filter-max-esg"
+              aria-label="Maximum ESG score"
               type="number"
               min={0}
               max={100}
@@ -118,7 +128,12 @@ export function TransactionsTable() {
             </TableHeader>
             <TableBody>
               {txns.isLoading && (
-                <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">Loading…</TableCell></TableRow>
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <p>Loading transactions…</p>
+                    <p className="text-xs mt-1">First request can take ~50s while the backend wakes up (free tier).</p>
+                  </TableCell>
+                </TableRow>
               )}
               {txns.isError && (
                 <TableRow>

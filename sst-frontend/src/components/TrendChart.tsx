@@ -13,7 +13,11 @@ export function TrendChart() {
         <p className="text-sm text-muted-foreground mb-6">Kilograms of CO₂ per month</p>
         <div className="h-72 w-full">
           {summary.isLoading ? (
-            <div className="h-full w-full bg-muted/30 animate-pulse rounded" />
+            <div className="h-full w-full bg-muted/30 animate-pulse rounded flex items-center justify-center">
+              <p className="text-xs text-muted-foreground px-4 text-center" role="status" aria-live="polite">
+                Loading chart… the backend may be cold-starting (~50s on free tier).
+              </p>
+            </div>
           ) : summary.isError ? (
             <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-center">
               <p className="text-sm text-destructive">Couldn't load the trend.</p>

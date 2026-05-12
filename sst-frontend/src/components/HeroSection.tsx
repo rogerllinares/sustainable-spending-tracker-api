@@ -8,10 +8,15 @@ export function HeroSection() {
 
   if (summary.isLoading || categories.isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[0, 1, 2].map((i) => (
-          <Card key={i}><CardContent className="h-32 animate-pulse bg-muted/30" /></Card>
-        ))}
+      <div>
+        <p className="text-xs text-muted-foreground text-center mb-3" role="status" aria-live="polite">
+          Loading summary… the backend may be cold-starting (~50s on free tier).
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[0, 1, 2].map((i) => (
+            <Card key={i}><CardContent className="h-32 animate-pulse bg-muted/30" /></Card>
+          ))}
+        </div>
       </div>
     )
   }
@@ -37,7 +42,7 @@ export function HeroSection() {
         <CardContent className="p-6">
           <p className="text-sm text-muted-foreground">Total CO₂ (last 6 months)</p>
           <p className="text-4xl font-bold text-primary mt-2">
-            {summary.data.totalCo2Kg.toFixed(1)} <span className="text-lg font-medium">kg</span>
+            {summary.data.totalCo2Kg.toFixed(1)} <span className="text-lg font-medium text-foreground">kg</span>
           </p>
         </CardContent>
       </Card>
