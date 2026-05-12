@@ -1387,7 +1387,7 @@ git commit -m "docs: update README with frontend stack, screenshot, and run inst
 
 ## Known follow-ups (out of scope, deferred)
 
-- **Replace mock auth with real OAuth — replicate the login pattern used in `03 Projects/Apostes Automatitzades/` (port that flow once Apostes ships).**
+- **Replace mock auth with real OAuth — replicate the login pattern used in `03 Projects/Proyectos Prioritarios/Apostes Automatitzades/` (port that flow once Apostes ships).**
 - Add Spring Security OAuth2 Resource Server on backend (Task 4 stub kept as legacy reference).
 - Dark mode toggle.
 - Mobile-first responsive review.

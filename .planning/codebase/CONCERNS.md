@@ -163,7 +163,7 @@
 **No Dockerfile:**
 - Problem: No `Dockerfile`, no `docker-compose.yml` at worktree root.
 - Blocks: Cannot deploy to Railway/Fly.io as planned in `CLAUDE.md`. Cannot run reproducible local Postgres for integration tests.
-- Files: Worktree root `c:/Users/llina/Desktop/SecondBrain/03 Projects/Sustainable Spending Tracker/sst/.worktrees/feature-backend/`.
+- Files: Worktree root `c:/Users/llina/Desktop/SecondBrain/03 Projects/Proyectos Prioritarios/Sustainable Spending Tracker/sst/.worktrees/feature-backend/`.
 
 **No CI pipeline:**
 - Problem: No `.github/workflows/` directory.

@@ -150,3 +150,48 @@ GitHub push → Railway deploy → URL Railway conocida
 | `docker-compose.yml` | Dev local con Postgres |
 | `Dockerfile` | Deploy Railway (ya existe, funciona) |
 | `docs/superpowers/plans/2026-05-06-frontend-dashboard.md` | Plan completo frontend (referencia) |
+
+---
+
+## Update 2026-05-12 — Printing Press CLI generada
+
+CLI agent-native creada desde el OpenAPI spec del backend. Vive en `03 Projects/Proyectos Prioritarios/Sustainable Spending Tracker/sst-pp-cli/` (fuera del submodule, dentro del project folder).
+
+**Comandos actuales** (re-generables si añades endpoints): `doctor`, `admin`, `transactions`, `sync`, `workflow`, `api`, `import`, `export`.
+
+**Doc completa de uso, comandos y plan de tests:** [[03 Projects/Proyectos Prioritarios/Sustainable Spending Tracker/AI_printing-press-cli-setup-2026-05-12.md]]
+
+### Próximos passos (todos pendientes — los tres a hacer)
+
+1. **Registrar la skill `pp-sst` en Claude Code**
+   - Ahora la CLI sólo se invoca manualmente.
+   - Con la skill registrada, Claude la usa solo cuando trabajamos en SST.
+   - Cómo: `npx -y skills@latest add <path-local-cli-skills/pp-sst> -g -y` (o publicar al library y usar el slug oficial).
+   - Verify: `pp-sst` aparece en lista de skills al `/new-session`.
+
+2. **Auth automática para endpoints admin**
+   - Hoy `sst-pp-cli admin` devuelve 401 porque Spring Security pide login.
+   - Configurar credenciales en `~/.config/sst-pp-cli/config.toml`.
+   - Mock login del frontend usa nombre+email — replicar mismo flujo en CLI.
+   - Verify: `sst-pp-cli admin --agent` devuelve `{"seeded": N}` sin 401.
+
+3. **Re-generar la CLI con endpoints Dashboard expuestos**
+   - El `DashboardController` existe pero no apareció en los comandos generados.
+   - Probablemente le faltan anotaciones `@Operation` de springdoc.
+   - Pasos: añadir anotaciones → arrancar backend → re-fetch `/api-docs` → `printing-press generate --force`.
+   - Verify: `sst-pp-cli dashboard --help` muestra los nuevos comandos.
+
+### Plan de tests con la CLI (golden path)
+
+Ver doc completa para detalles. Resumen:
+```bash
+sst-pp-cli doctor                                          # smoke
+sst-pp-cli admin --agent                                    # seed (req auth)
+sst-pp-cli transactions --pageable "page=0&size=100" --agent
+sst-pp-cli transactions --category food --pageable "..." --agent
+sst-pp-cli transactions --min-score 70 --max-score 100 ...
+sst-pp-cli transactions --date-from ... --date-to ... ...
+sst-pp-cli sync && sst-pp-cli transactions --data-source local ...
+```
+
+Cada step → JSON estructurado → Claude testea sin abrir navegador. ~10x más rápido que el flujo Swagger UI actual.
