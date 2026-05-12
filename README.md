@@ -1,5 +1,7 @@
 # Sustainable Spending Tracker (SST)
 
+**Status:** shipped (2026-05-12) — frontend + backend live, audits passed (UI/Code/CSO/SEO + Karpathy).
+
 Portfolio app — connects bank transactions and computes per-purchase CO₂ footprint and ESG score. Built as a portfolio piece for Clarity AI.
 
 ## Live
