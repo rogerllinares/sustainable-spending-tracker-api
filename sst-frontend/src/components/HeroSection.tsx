@@ -16,7 +16,17 @@ export function HeroSection() {
     )
   }
   if (summary.isError || !summary.data) {
-    return <div className="text-destructive">Failed to load summary.</div>
+    return (
+      <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6 flex items-center justify-between gap-4">
+        <p className="text-sm text-destructive">Failed to load summary.</p>
+        <button
+          onClick={() => { summary.refetch(); categories.refetch(); }}
+          className="px-3 py-1.5 text-sm rounded-md border border-destructive/40 text-destructive hover:bg-destructive/10 transition"
+        >
+          Retry
+        </button>
+      </div>
+    )
   }
 
   const topCategory = categories.data?.[0]?.category ?? "—"
