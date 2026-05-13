@@ -1,61 +1,49 @@
 package com.rogerllina.sst.service
 
-import com.rogerllina.sst.model.Account
-import com.rogerllina.sst.model.MccScore
-import com.rogerllina.sst.model.Transaction
+import com.rogerllina.sst.repository.CategorySummaryProjection
+import com.rogerllina.sst.repository.MonthlyTrendProjection
+import com.rogerllina.sst.repository.SummaryProjection
 import com.rogerllina.sst.repository.TransactionRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
-import java.time.LocalDateTime
-import java.util.UUID
 
 class DashboardServiceTest {
 
     private val transactionRepository = mockk<TransactionRepository>()
     private val service = DashboardService(transactionRepository)
 
-    private val account = Account(
-        id = UUID.randomUUID(),
-        name = "Test Account",
-        iban = "ES12345678901234567890",
-        currency = "EUR",
-        balance = BigDecimal("1000.00")
-    )
+    private fun summary(co2: BigDecimal?, avgEsg: Double?, count: Long) =
+        object : SummaryProjection {
+            override val totalCo2Kg = co2
+            override val avgEsgScore = avgEsg
+            override val transactionCount = count
+        }
 
-    private val mccScore = MccScore(
-        mccCode = "5411",
-        category = "Food",
-        description = "Supermarket",
-        co2PerEur = BigDecimal("0.21"),
-        esgScore = 72
-    )
+    private fun month(year: Int, month: Int, co2: BigDecimal, avgEsg: Double, count: Long) =
+        object : MonthlyTrendProjection {
+            override val year = year
+            override val month = month
+            override val co2Kg: BigDecimal = co2
+            override val avgEsgScore: Double = avgEsg
+            override val transactionCount = count
+        }
 
-    private fun makeTransaction(
-        co2Kg: BigDecimal,
-        esgScore: Int,
-        category: String = "Food",
-        date: LocalDateTime = LocalDateTime.of(2026, 1, 15, 10, 0),
-        amount: BigDecimal = BigDecimal("50.00")
-    ) = Transaction(
-        id = UUID.randomUUID(),
-        account = account,
-        mccScore = mccScore,
-        date = date,
-        amount = amount,
-        currency = "EUR",
-        merchantName = "Merchant",
-        category = category,
-        description = "desc",
-        co2Kg = co2Kg,
-        esgScore = esgScore
-    )
+    private fun category(name: String, spend: BigDecimal, co2: BigDecimal, avgEsg: Double, count: Long) =
+        object : CategorySummaryProjection {
+            override val category = name
+            override val totalSpend: BigDecimal = spend
+            override val totalCo2Kg: BigDecimal = co2
+            override val avgEsgScore: Double = avgEsg
+            override val transactionCount = count
+        }
 
     @Test
-    fun `getSummary with empty transactions returns zeros`() {
-        every { transactionRepository.findAll() } returns emptyList()
+    fun `getSummary with no transactions returns zeros`() {
+        every { transactionRepository.aggregateSummary() } returns summary(BigDecimal.ZERO, null, 0)
+        every { transactionRepository.aggregateMonthlyTrend() } returns emptyList()
 
         val result = service.getSummary()
 
@@ -66,11 +54,12 @@ class DashboardServiceTest {
     }
 
     @Test
-    fun `getSummary aggregates correctly`() {
-        val jan2026 = LocalDateTime.of(2026, 1, 15, 10, 0)
-        val t1 = makeTransaction(co2Kg = BigDecimal("1.0"), esgScore = 40, date = jan2026)
-        val t2 = makeTransaction(co2Kg = BigDecimal("2.0"), esgScore = 60, date = jan2026)
-        every { transactionRepository.findAll() } returns listOf(t1, t2)
+    fun `getSummary maps projection rows to DTO`() {
+        every { transactionRepository.aggregateSummary() } returns
+            summary(BigDecimal("3.0"), 50.0, 2)
+        every { transactionRepository.aggregateMonthlyTrend() } returns listOf(
+            month(2026, 1, BigDecimal("3.0"), 50.0, 2)
+        )
 
         val result = service.getSummary()
 
@@ -85,10 +74,37 @@ class DashboardServiceTest {
     }
 
     @Test
-    fun `getCategorySummaries groups by category`() {
-        val t1 = makeTransaction(co2Kg = BigDecimal("1.5"), esgScore = 40, category = "Food", amount = BigDecimal("30.00"))
-        val t2 = makeTransaction(co2Kg = BigDecimal("2.5"), esgScore = 60, category = "Food", amount = BigDecimal("70.00"))
-        every { transactionRepository.findAll() } returns listOf(t1, t2)
+    fun `getSummary preserves repository ordering for monthly trend`() {
+        every { transactionRepository.aggregateSummary() } returns
+            summary(BigDecimal("10.0"), 55.0, 4)
+        every { transactionRepository.aggregateMonthlyTrend() } returns listOf(
+            month(2026, 3, BigDecimal("4.0"), 60.0, 2),
+            month(2026, 1, BigDecimal("6.0"), 50.0, 2)
+        )
+
+        val result = service.getSummary()
+
+        assertEquals(listOf("2026-03", "2026-01"), result.monthlyTrend.map { it.month })
+    }
+
+    @Test
+    fun `getSummary formats single-digit months with leading zero`() {
+        every { transactionRepository.aggregateSummary() } returns
+            summary(BigDecimal("1.0"), 40.0, 1)
+        every { transactionRepository.aggregateMonthlyTrend() } returns listOf(
+            month(2026, 2, BigDecimal("1.0"), 40.0, 1)
+        )
+
+        val result = service.getSummary()
+
+        assertEquals("2026-02", result.monthlyTrend[0].month)
+    }
+
+    @Test
+    fun `getCategorySummaries maps projection rows to DTO`() {
+        every { transactionRepository.aggregateByCategory() } returns listOf(
+            category("Food", BigDecimal("100.00"), BigDecimal("4.0"), 50.0, 2)
+        )
 
         val result = service.getCategorySummaries()
 
@@ -99,5 +115,17 @@ class DashboardServiceTest {
         assertEquals(BigDecimal("4.0"), food.totalCo2Kg)
         assertEquals(50, food.avgEsgScore)
         assertEquals(2, food.transactionCount)
+    }
+
+    @Test
+    fun `getCategorySummaries preserves repository ordering`() {
+        every { transactionRepository.aggregateByCategory() } returns listOf(
+            category("Transport", BigDecimal("50.00"), BigDecimal("8.0"), 30.0, 1),
+            category("Food", BigDecimal("100.00"), BigDecimal("4.0"), 50.0, 2)
+        )
+
+        val result = service.getCategorySummaries()
+
+        assertEquals(listOf("Transport", "Food"), result.map { it.category })
     }
 }

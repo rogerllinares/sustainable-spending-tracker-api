@@ -6,65 +6,36 @@ import com.rogerllina.sst.dto.MonthlyTrendDto
 import com.rogerllina.sst.repository.TransactionRepository
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.math.RoundingMode
-import java.time.format.DateTimeFormatter
 
 @Service
 class DashboardService(private val transactionRepository: TransactionRepository) {
 
-    private val monthFormatter = DateTimeFormatter.ofPattern("yyyy-MM")
-
     fun getSummary(): DashboardSummaryDto {
-        val transactions = transactionRepository.findAll()
-
-        if (transactions.isEmpty()) {
-            return DashboardSummaryDto(
-                totalCo2Kg = BigDecimal.ZERO,
-                avgEsgScore = 0,
-                transactionCount = 0,
-                monthlyTrend = emptyList()
+        val summary = transactionRepository.aggregateSummary()
+        val monthly = transactionRepository.aggregateMonthlyTrend().map {
+            MonthlyTrendDto(
+                month = "%04d-%02d".format(it.year, it.month),
+                co2Kg = it.co2Kg ?: BigDecimal.ZERO,
+                esgScore = it.avgEsgScore?.toInt() ?: 0,
+                transactionCount = it.transactionCount.toInt()
             )
         }
-
-        val totalCo2Kg = transactions.fold(BigDecimal.ZERO) { acc, t -> acc + t.co2Kg }
-        val avgEsgScore = transactions.map { it.esgScore }.average().toInt()
-        val count = transactions.size
-
-        val monthlyTrend = transactions
-            .groupBy { it.date.format(monthFormatter) }
-            .entries
-            .sortedByDescending { it.key }
-            .map { (month, txs) ->
-                MonthlyTrendDto(
-                    month = month,
-                    co2Kg = txs.fold(BigDecimal.ZERO) { acc, t -> acc + t.co2Kg },
-                    esgScore = txs.map { it.esgScore }.average().toInt(),
-                    transactionCount = txs.size
-                )
-            }
-
         return DashboardSummaryDto(
-            totalCo2Kg = totalCo2Kg,
-            avgEsgScore = avgEsgScore,
-            transactionCount = count,
-            monthlyTrend = monthlyTrend
+            totalCo2Kg = summary.totalCo2Kg ?: BigDecimal.ZERO,
+            avgEsgScore = summary.avgEsgScore?.toInt() ?: 0,
+            transactionCount = summary.transactionCount.toInt(),
+            monthlyTrend = monthly
         )
     }
 
-    fun getCategorySummaries(): List<CategorySummaryDto> {
-        val transactions = transactionRepository.findAll()
-
-        return transactions
-            .groupBy { it.category }
-            .map { (category, txs) ->
-                CategorySummaryDto(
-                    category = category,
-                    totalSpend = txs.fold(BigDecimal.ZERO) { acc, t -> acc + t.amount },
-                    totalCo2Kg = txs.fold(BigDecimal.ZERO) { acc, t -> acc + t.co2Kg },
-                    avgEsgScore = txs.map { it.esgScore }.average().toInt(),
-                    transactionCount = txs.size
-                )
-            }
-            .sortedByDescending { it.totalCo2Kg }
-    }
+    fun getCategorySummaries(): List<CategorySummaryDto> =
+        transactionRepository.aggregateByCategory().map {
+            CategorySummaryDto(
+                category = it.category,
+                totalSpend = it.totalSpend ?: BigDecimal.ZERO,
+                totalCo2Kg = it.totalCo2Kg ?: BigDecimal.ZERO,
+                avgEsgScore = it.avgEsgScore?.toInt() ?: 0,
+                transactionCount = it.transactionCount.toInt()
+            )
+        }
 }
