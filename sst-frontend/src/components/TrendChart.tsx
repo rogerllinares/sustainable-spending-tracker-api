@@ -1,7 +1,19 @@
+import { lazy, Suspense } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { useDashboardSummary } from "@/api/dashboard"
+
+const TrendChartContent = lazy(() => import("./TrendChartContent"))
+
+function ChartSkeleton({ message }: { message: string }) {
+  return (
+    <div className="h-full w-full bg-muted/30 animate-pulse rounded flex items-center justify-center">
+      <p className="text-xs text-muted-foreground px-4 text-center" role="status" aria-live="polite">
+        {message}
+      </p>
+    </div>
+  )
+}
 
 export function TrendChart() {
   const summary = useDashboardSummary()
@@ -13,11 +25,7 @@ export function TrendChart() {
         <p className="text-sm text-muted-foreground mb-6">Kilograms of CO₂ per month</p>
         <div className="h-72 w-full">
           {summary.isLoading ? (
-            <div className="h-full w-full bg-muted/30 animate-pulse rounded flex items-center justify-center">
-              <p className="text-xs text-muted-foreground px-4 text-center" role="status" aria-live="polite">
-                Loading chart… the backend may be cold-starting (~50s on free tier).
-              </p>
-            </div>
+            <ChartSkeleton message="Loading chart… the backend may be cold-starting (~50s on free tier)." />
           ) : summary.isError ? (
             <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-center">
               <p className="text-sm text-destructive">Couldn't load the trend.</p>
@@ -29,18 +37,9 @@ export function TrendChart() {
               </Button>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={summary.data?.monthlyTrend ?? []} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
-                <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
-                <YAxis stroke="#6B7280" fontSize={12} />
-                <Tooltip
-                  contentStyle={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8 }}
-                  formatter={(value) => [`${Number(value).toFixed(1)} kg`, "CO₂"]}
-                />
-                <Bar dataKey="co2Kg" fill="#16A34A" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <Suspense fallback={<ChartSkeleton message="Loading chart…" />}>
+              <TrendChartContent data={summary.data?.monthlyTrend ?? []} />
+            </Suspense>
           )}
         </div>
       </CardContent>
