@@ -7,7 +7,7 @@ describe('cn', () => {
   })
 
   it('drops falsy values', () => {
-    expect(cn('a', false && 'b', null, undefined, 'c')).toBe('a c')
+    expect(cn('a', (false as boolean) && 'b', null, undefined, 'c')).toBe('a c')
   })
 
   it('merges conflicting tailwind classes keeping the last one', () => {

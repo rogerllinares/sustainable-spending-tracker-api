@@ -1,7 +1,8 @@
-/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type VitestConfig = { test?: any }
 
 export default defineConfig({
   plugins: [react()],
@@ -9,11 +10,13 @@ export default defineConfig({
     alias: { "@": path.resolve(__dirname, "./src") },
   },
   server: { port: 5173 },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    css: false,
-    exclude: ['node_modules', 'dist', 'tests/e2e/**'],
-  },
+  ...(({
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
+      css: false,
+      exclude: ['node_modules', 'dist', 'tests/e2e/**'],
+    },
+  }) as VitestConfig),
 })

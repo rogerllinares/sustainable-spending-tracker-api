@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useMemo, type ReactNode } from "react"
+import { createContext, useContext, useState, useMemo, useCallback, type ReactNode } from "react"
 
 interface AuthState {
   token: string | null
@@ -23,20 +23,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     picture: null,
   })
 
+  const login = useCallback((token: string, profile: { email: string; name: string; picture: string }) => {
+    setState({ token, email: profile.email, name: profile.name, picture: profile.picture })
+  }, [])
+
+  const logout = useCallback(() => {
+    setState({ token: null, email: null, name: null, picture: null })
+  }, [])
+
   const value = useMemo<AuthContextValue>(
     () => ({
       ...state,
       isAuthenticated: !!state.token,
-      login: (token, profile) =>
-        setState({ token, email: profile.email, name: profile.name, picture: profile.picture }),
-      logout: () => setState({ token: null, email: null, name: null, picture: null }),
+      login,
+      logout,
     }),
-    [state],
+    [state, login, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>")
