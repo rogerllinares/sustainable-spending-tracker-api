@@ -23,6 +23,25 @@
     --ring: 142 76% 36%;
     --radius: 0.5rem;
   }
+  .dark {
+    --background: 222 47% 8%;         /* #0B1120 near-black */
+    --foreground: 210 40% 96%;        /* #F1F5F9 gray-100 */
+    --card: 222 47% 11%;              /* #111827 gray-900 */
+    --card-foreground: 210 40% 96%;
+    --primary: 142 71% 45%;           /* #22C55E green-500 — brighter for contrast */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;         /* #1F2937 gray-800 */
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;  /* #94A3B8 gray-400 */
+    --accent: 142 71% 58%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 33% 22%;            /* #2A3441 */
+    --input: 217 33% 22%;
+    --ring: 142 71% 45%;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

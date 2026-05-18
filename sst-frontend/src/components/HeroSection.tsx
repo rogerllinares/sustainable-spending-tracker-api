@@ -39,19 +39,19 @@ export function HeroSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card>
-        <CardContent className="p-6">
-          <p className="text-sm text-muted-foreground">Total CO₂ (last 6 months)</p>
-          <p className="text-4xl font-bold text-primary mt-2">
-            {summary.data.totalCo2Kg.toFixed(1)} <span className="text-lg font-medium text-foreground">kg</span>
+        <CardContent className="p-4 md:p-6">
+          <p className="text-xs md:text-sm text-muted-foreground">Total CO₂ (last 6 months)</p>
+          <p className="text-3xl md:text-4xl font-bold text-primary mt-2">
+            {summary.data.totalCo2Kg.toFixed(1)} <span className="text-base md:text-lg font-medium text-foreground">kg</span>
           </p>
         </CardContent>
       </Card>
 
       <Card>
-        <CardContent className="p-6">
-          <p className="text-sm text-muted-foreground">Average ESG score</p>
+        <CardContent className="p-4 md:p-6">
+          <p className="text-xs md:text-sm text-muted-foreground">Average ESG score</p>
           <div className="mt-2 flex items-center gap-3">
-            <p className="text-4xl font-bold text-foreground">
+            <p className="text-3xl md:text-4xl font-bold text-foreground">
               {summary.data.avgEsgScore.toFixed(0)}
             </p>
             <EsgBadge score={summary.data.avgEsgScore} />
@@ -60,9 +60,9 @@ export function HeroSection() {
       </Card>
 
       <Card>
-        <CardContent className="p-6">
-          <p className="text-sm text-muted-foreground">Top polluting category</p>
-          <p className="text-2xl font-semibold text-foreground mt-2">{topCategory}</p>
+        <CardContent className="p-4 md:p-6">
+          <p className="text-xs md:text-sm text-muted-foreground">Top polluting category</p>
+          <p className="text-xl md:text-2xl font-semibold text-foreground mt-2">{topCategory}</p>
           {categories.data?.[0] && (
             <p className="text-xs text-muted-foreground mt-1">
               {categories.data[0].totalCo2Kg.toFixed(1)} kg CO₂
