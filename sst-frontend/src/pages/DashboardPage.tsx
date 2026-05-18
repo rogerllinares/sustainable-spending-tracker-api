@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { HeroSection } from "@/components/HeroSection"
 import { TrendChart } from "@/components/TrendChart"
 import { TransactionsTable } from "@/components/TransactionsTable"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { useNavigate } from "react-router-dom"
 
 export function DashboardPage() {
@@ -27,6 +28,7 @@ export function DashboardPage() {
           <div className="flex items-center gap-3">
             {picture && <img src={picture} alt={name ?? ""} className="h-8 w-8 rounded-full" />}
             <span className="text-sm text-foreground">{name}</span>
+            <ThemeToggle />
             <Button variant="outline" size="sm" onClick={handleLogout}>Sign out</Button>
           </div>
         </div>

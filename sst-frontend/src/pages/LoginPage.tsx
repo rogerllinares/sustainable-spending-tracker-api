@@ -4,6 +4,7 @@ import { useAuth } from "@/auth/AuthContext"
 import { setAuthToken } from "@/api/client"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -23,7 +24,10 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-card border border-border rounded-lg shadow-sm p-8"
