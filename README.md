@@ -6,7 +6,7 @@ Turn bank transactions into a carbon footprint + ESG score per purchase. Full-st
 
 > ⏱ **Cold start:** Render free tier sleeps after 15 min idle. The first request after a cold start takes ~50s — the dashboard shows a skeleton while it wakes up.
 
-**Status:** shipped (2026-05-12) — frontend + backend live, 4-dimension audits passed (UI/Code/CSO/SEO + Karpathy), 14/14 backend tests green.
+**Status:** shipped (2026-05-12, hardened 2026-05-18) — frontend + backend live, 4-dimension audits passed (UI/Code/CSO/SEO + Karpathy), 18/18 backend gradle tests green, **13/13 frontend Vitest tests green**, dark mode + mobile responsive.
 
 ## Endpoints
 
@@ -17,7 +17,9 @@ Turn bank transactions into a carbon footprint + ESG score per purchase. Full-st
 ## Stack
 
 - **Backend:** Kotlin · Spring Boot 3.5 · PostgreSQL · Flyway · TDD with MockK
-- **Frontend:** React 18 · TypeScript · Vite · Tailwind · shadcn/ui · Recharts · TanStack Query
+- **Frontend:** React 19 · TypeScript · Vite · Tailwind · shadcn/ui · Recharts · TanStack Query
+- **Tests:** Vitest + Testing Library (frontend) · JUnit + MockK (backend) · Playwright (E2E smoke)
+- **Theme:** Light + dark mode (localStorage + `prefers-color-scheme` fallback)
 - **Auth:** Mock login form (portfolio demo). Architecture is OAuth-ready — see *Possible improvements*.
 - **Infra:** Docker · Vercel (frontend) · Render (backend) · Supabase (DB)
 
@@ -95,6 +97,6 @@ sst/
 
 - **Real auth:** replace the mock login form with OAuth (Google, GitHub). The `AuthContext` and Bearer interceptor are already wired — only `LoginPage` and a backend Spring Security Resource Server need swapping in. The plan is to port the OAuth flow from the `Apostes Automatitzades` project once that ships.
 - Move dashboard aggregation from in-memory to SQL `GROUP BY` (current implementation is correct but does not scale beyond ~10k transactions).
-- Dark mode toggle + mobile-first responsive review.
-- Code-split the Recharts bundle (currently ~676 KB gzipped).
+- Code-split the Recharts bundle (currently ~210 KB gzipped initial chunk).
 - Real emission factors via an audited dataset (e.g. Carbon Cloud, Klima) and merchant-level overrides instead of MCC-only.
+- CI/CD via GitHub Actions (`npm test && npm run build && vercel deploy` on push to `master`).
