@@ -27,8 +27,8 @@ export function TransactionsTable() {
 
   return (
     <Card>
-      <CardContent className="p-6">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Transactions</h2>
+      <CardContent className="p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-foreground mb-4">Transactions</h2>
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4 items-end">
           <div className="col-span-2 md:col-span-1">
@@ -120,7 +120,7 @@ export function TransactionsTable() {
               <TableRow>
                 <TableHead>Date</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead>Category</TableHead>
+                <TableHead className="hidden md:table-cell">Category</TableHead>
                 <TableHead className="text-right">Amount (€)</TableHead>
                 <TableHead className="text-right">CO₂ (kg)</TableHead>
                 <TableHead className="text-right">ESG</TableHead>
@@ -155,8 +155,9 @@ export function TransactionsTable() {
                     {t.merchantName && (
                       <div className="text-xs text-muted-foreground">{t.description}</div>
                     )}
+                    <div className="md:hidden text-xs text-muted-foreground mt-0.5">{t.category}</div>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{t.category}</TableCell>
+                  <TableCell className="hidden md:table-cell text-muted-foreground">{t.category}</TableCell>
                   <TableCell className="text-right font-medium">{t.amount.toFixed(2)}</TableCell>
                   <TableCell className="text-right">{t.co2Kg.toFixed(2)}</TableCell>
                   <TableCell className="text-right"><EsgBadge score={t.esgScore} /></TableCell>

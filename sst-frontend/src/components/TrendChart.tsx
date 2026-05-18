@@ -8,10 +8,10 @@ export function TrendChart() {
 
   return (
     <Card>
-      <CardContent className="p-6">
-        <h2 className="text-lg font-semibold text-foreground mb-1">Monthly CO₂ trend</h2>
-        <p className="text-sm text-muted-foreground mb-6">Kilograms of CO₂ per month</p>
-        <div className="h-72 w-full">
+      <CardContent className="p-4 md:p-6">
+        <h2 className="text-base md:text-lg font-semibold text-foreground mb-1">Monthly CO₂ trend</h2>
+        <p className="text-xs md:text-sm text-muted-foreground mb-4 md:mb-6">Kilograms of CO₂ per month</p>
+        <div className="h-56 md:h-72 w-full">
           {summary.isLoading ? (
             <div className="h-full w-full bg-muted/30 animate-pulse rounded flex items-center justify-center">
               <p className="text-xs text-muted-foreground px-4 text-center" role="status" aria-live="polite">
@@ -31,14 +31,22 @@ export function TrendChart() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={summary.data?.monthlyTrend ?? []} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
-                <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
-                <YAxis stroke="#6B7280" fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <Tooltip
-                  contentStyle={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8 }}
+                  contentStyle={{
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: 8,
+                    color: "hsl(var(--foreground))",
+                  }}
+                  labelStyle={{ color: "hsl(var(--foreground))" }}
+                  itemStyle={{ color: "hsl(var(--foreground))" }}
+                  cursor={{ fill: "hsl(var(--muted) / 0.3)" }}
                   formatter={(value) => [`${Number(value).toFixed(1)} kg`, "CO₂"]}
                 />
-                <Bar dataKey="co2Kg" fill="#16A34A" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="co2Kg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
