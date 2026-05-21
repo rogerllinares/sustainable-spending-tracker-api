@@ -1,5 +1,11 @@
 # Sustainable Spending Tracker (SST)
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://sst-frontend-steel.vercel.app)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Backend](https://img.shields.io/badge/backend-Kotlin%20%2B%20Spring%20Boot-7F52FF)
+![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20TypeScript-61DAFB)
+![Tests](https://img.shields.io/badge/tests-18%20backend%20%2B%2013%20frontend-success)
+
 Turn bank transactions into a carbon footprint + ESG score per purchase. Full-stack portfolio piece — Kotlin/Spring Boot backend, React/TypeScript dashboard, deployed on Render + Vercel + Supabase.
 
 **▶ Live demo: https://sst-frontend-steel.vercel.app** *(use any name + email to log in)*
