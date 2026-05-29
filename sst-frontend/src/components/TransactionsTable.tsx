@@ -36,7 +36,7 @@ export function TransactionsTable() {
             <select
               id="filter-category"
               aria-label="Filter by category"
-              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              className="h-11 md:h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={filters.category ?? ""}
               onChange={(e) => update({ category: e.target.value || undefined })}
             >
@@ -55,7 +55,7 @@ export function TransactionsTable() {
               type="date"
               value={filters.dateFrom ?? ""}
               onChange={(e) => update({ dateFrom: e.target.value || undefined })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -67,7 +67,7 @@ export function TransactionsTable() {
               type="date"
               value={filters.dateTo ?? ""}
               onChange={(e) => update({ dateTo: e.target.value || undefined })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -83,7 +83,7 @@ export function TransactionsTable() {
               onChange={(e) =>
                 update({ minScore: e.target.value === "" ? undefined : Number(e.target.value) })
               }
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -99,7 +99,7 @@ export function TransactionsTable() {
               onChange={(e) =>
                 update({ maxScore: e.target.value === "" ? undefined : Number(e.target.value) })
               }
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -107,7 +107,7 @@ export function TransactionsTable() {
             <Button
               variant="outline"
               onClick={() => setFilters({ page: 0, size: PAGE_SIZE })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             >
               Reset
             </Button>
@@ -177,12 +177,14 @@ export function TransactionsTable() {
               <Button
                 variant="outline"
                 size="sm"
+                className="min-h-[44px] px-4 md:min-h-0 md:px-3"
                 disabled={txns.data.page === 0}
                 onClick={() => setFilters((p) => ({ ...p, page: (p.page ?? 0) - 1 }))}
               >Previous</Button>
               <Button
                 variant="outline"
                 size="sm"
+                className="min-h-[44px] px-4 md:min-h-0 md:px-3"
                 disabled={txns.data.page + 1 >= txns.data.totalPages}
                 onClick={() => setFilters((p) => ({ ...p, page: (p.page ?? 0) + 1 }))}
               >Next</Button>
