@@ -30,11 +30,35 @@ describe('LoginPage', () => {
     expect(screen.getByRole('button', { name: /enter demo/i })).toBeInTheDocument()
   })
 
+  it('exposes accessible labels for both inputs (WCAG 1.3.1/4.1.2)', () => {
+    renderLogin()
+    // getByLabelText only resolves when an associated <label htmlFor> exists.
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
+  })
+
+  it('shows an accessible error instead of failing silently on empty submit', async () => {
+    const user = userEvent.setup()
+    renderLogin()
+    await user.click(screen.getByRole('button', { name: /enter demo/i }))
+    expect(await screen.findByRole('alert')).toHaveTextContent(/name and email/i)
+  })
+
+  it('rejects an invalid email format', async () => {
+    const user = userEvent.setup()
+    renderLogin()
+    await user.type(screen.getByLabelText(/name/i), 'Roger')
+    await user.type(screen.getByLabelText(/email/i), 'not-an-email')
+    await user.click(screen.getByRole('button', { name: /enter demo/i }))
+    expect(await screen.findByRole('alert')).toHaveTextContent(/valid email/i)
+    expect(screen.queryByText('dashboard reached')).not.toBeInTheDocument()
+  })
+
   it('navigates to /dashboard after submitting valid credentials', async () => {
     const user = userEvent.setup()
     renderLogin()
-    await user.type(screen.getByPlaceholderText('Your name'), 'Roger')
-    await user.type(screen.getByPlaceholderText('you@example.com'), 'roger@example.com')
+    await user.type(screen.getByLabelText(/name/i), 'Roger')
+    await user.type(screen.getByLabelText(/email/i), 'roger@example.com')
     await user.click(screen.getByRole('button', { name: /enter demo/i }))
     expect(await screen.findByText('dashboard reached')).toBeInTheDocument()
   })

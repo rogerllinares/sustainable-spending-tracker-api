@@ -7,12 +7,16 @@ interface EsgBadgeProps {
 }
 
 export function EsgBadge({ score, className }: EsgBadgeProps) {
+  // DESIGN.md sec.2 ESG Scale: Good >=70 / Mid 40-69 / Bad <40, fg/bg/border triad from tokens.
   const tone =
-    score >= 70 ? "bg-green-100 text-green-800 border-green-200"
-    : score >= 40 ? "bg-amber-100 text-amber-800 border-amber-200"
-    : "bg-red-100 text-red-800 border-red-200"
+    score >= 70 ? "bg-esg-good text-esg-good-foreground border-esg-good-border"
+    : score >= 40 ? "bg-esg-mid text-esg-mid-foreground border-esg-mid-border"
+    : "bg-esg-bad text-esg-bad-foreground border-esg-bad-border"
   return (
-    <Badge variant="outline" className={cn("font-medium", tone, className)}>
+    <Badge
+      variant="outline"
+      className={cn("font-mono text-[0.72rem] font-medium tabular-nums", tone, className)}
+    >
       {score.toFixed(0)}
     </Badge>
   )

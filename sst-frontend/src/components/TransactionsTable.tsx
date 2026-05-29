@@ -36,7 +36,7 @@ export function TransactionsTable() {
             <select
               id="filter-category"
               aria-label="Filter by category"
-              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              className="h-11 md:h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={filters.category ?? ""}
               onChange={(e) => update({ category: e.target.value || undefined })}
             >
@@ -55,7 +55,7 @@ export function TransactionsTable() {
               type="date"
               value={filters.dateFrom ?? ""}
               onChange={(e) => update({ dateFrom: e.target.value || undefined })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -67,7 +67,7 @@ export function TransactionsTable() {
               type="date"
               value={filters.dateTo ?? ""}
               onChange={(e) => update({ dateTo: e.target.value || undefined })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -83,7 +83,7 @@ export function TransactionsTable() {
               onChange={(e) =>
                 update({ minScore: e.target.value === "" ? undefined : Number(e.target.value) })
               }
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -99,7 +99,7 @@ export function TransactionsTable() {
               onChange={(e) =>
                 update({ maxScore: e.target.value === "" ? undefined : Number(e.target.value) })
               }
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             />
           </div>
 
@@ -107,7 +107,7 @@ export function TransactionsTable() {
             <Button
               variant="outline"
               onClick={() => setFilters({ page: 0, size: PAGE_SIZE })}
-              className="h-9 w-full"
+              className="h-11 md:h-9 w-full"
             >
               Reset
             </Button>
@@ -117,7 +117,8 @@ export function TransactionsTable() {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
+              {/* DESIGN.md sec.3 label token: mono, uppercase, tracked — column headers only */}
+              <TableRow className="font-mono text-[0.66rem] uppercase tracking-[0.04em]">
                 <TableHead>Date</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
@@ -149,7 +150,7 @@ export function TransactionsTable() {
               )}
               {!txns.isError && txns.data?.content.map((t) => (
                 <TableRow key={t.id}>
-                  <TableCell className="font-mono text-xs">{t.date.slice(0, 10)}</TableCell>
+                  <TableCell className="font-mono text-xs tabular-nums">{t.date.slice(0, 10)}</TableCell>
                   <TableCell>
                     <div className="font-medium">{t.merchantName ?? t.description}</div>
                     {t.merchantName && (
@@ -158,8 +159,8 @@ export function TransactionsTable() {
                     <div className="md:hidden text-xs text-muted-foreground mt-0.5">{t.category}</div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground">{t.category}</TableCell>
-                  <TableCell className="text-right font-medium">{t.amount.toFixed(2)}</TableCell>
-                  <TableCell className="text-right">{t.co2Kg.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono font-medium tabular-nums">{t.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono tabular-nums">{t.co2Kg.toFixed(2)}</TableCell>
                   <TableCell className="text-right"><EsgBadge score={t.esgScore} /></TableCell>
                 </TableRow>
               ))}
@@ -176,12 +177,14 @@ export function TransactionsTable() {
               <Button
                 variant="outline"
                 size="sm"
+                className="min-h-[44px] px-4 md:min-h-0 md:px-3"
                 disabled={txns.data.page === 0}
                 onClick={() => setFilters((p) => ({ ...p, page: (p.page ?? 0) - 1 }))}
               >Previous</Button>
               <Button
                 variant="outline"
                 size="sm"
+                className="min-h-[44px] px-4 md:min-h-0 md:px-3"
                 disabled={txns.data.page + 1 >= txns.data.totalPages}
                 onClick={() => setFilters((p) => ({ ...p, page: (p.page ?? 0) + 1 }))}
               >Next</Button>
