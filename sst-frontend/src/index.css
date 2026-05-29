@@ -22,6 +22,16 @@
     --input: 220 13% 91%;
     --ring: 142 76% 36%;
     --radius: 0.5rem;
+    /* ESG scale (DESIGN.md sec.2 — Color-Plus-Number Rule) */
+    --esg-good-fg: 142 61% 25%;       /* #166534 green-800 */
+    --esg-good-bg: 138 76% 92%;       /* #DCFCE7 green-100 */
+    --esg-good-border: 141 79% 85%;   /* #BBF7D0 green-200 */
+    --esg-mid-fg: 26 84% 31%;         /* #92400E amber-800 */
+    --esg-mid-bg: 48 96% 89%;         /* #FEF3C7 amber-100 */
+    --esg-mid-border: 48 97% 77%;     /* #FDE68A amber-200 */
+    --esg-bad-fg: 0 70% 35%;          /* #991B1B red-800 */
+    --esg-bad-bg: 0 93% 94%;          /* #FEE2E2 red-100 */
+    --esg-bad-border: 0 96% 89%;      /* #FECACA red-200 */
   }
   .dark {
     --background: 222 47% 8%;         /* #0B1120 near-black */
@@ -41,6 +51,16 @@
     --border: 217 33% 22%;            /* #2A3441 */
     --input: 217 33% 22%;
     --ring: 142 71% 45%;
+    /* ESG chip is self-contained (light bg + dark fg); same triad reads on any surface */
+    --esg-good-fg: 142 61% 25%;
+    --esg-good-bg: 138 76% 92%;
+    --esg-good-border: 141 79% 85%;
+    --esg-mid-fg: 26 84% 31%;
+    --esg-mid-bg: 48 96% 89%;
+    --esg-mid-border: 48 97% 77%;
+    --esg-bad-fg: 0 70% 35%;
+    --esg-bad-bg: 0 93% 94%;
+    --esg-bad-border: 0 96% 89%;
   }
   body {
     @apply bg-background text-foreground;

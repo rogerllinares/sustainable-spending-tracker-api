@@ -10,10 +10,30 @@ const config: Config = {
       screens: { "2xl": "1400px" },
     },
     extend: {
+      fontFamily: {
+        // DESIGN.md sec.3 — mono partner carries every figure and field label
+        mono: ['ui-monospace', 'SF Mono', 'Cascadia Code', 'Menlo', 'Consolas', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        // ESG scale triads (DESIGN.md sec.2)
+        "esg-good": {
+          DEFAULT: "hsl(var(--esg-good-bg))",
+          foreground: "hsl(var(--esg-good-fg))",
+          border: "hsl(var(--esg-good-border))",
+        },
+        "esg-mid": {
+          DEFAULT: "hsl(var(--esg-mid-bg))",
+          foreground: "hsl(var(--esg-mid-fg))",
+          border: "hsl(var(--esg-mid-border))",
+        },
+        "esg-bad": {
+          DEFAULT: "hsl(var(--esg-bad-bg))",
+          foreground: "hsl(var(--esg-bad-fg))",
+          border: "hsl(var(--esg-bad-border))",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
