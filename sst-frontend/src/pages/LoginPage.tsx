@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react"
+import { useRef, useState, type FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/auth/AuthContext"
 import { setAuthToken } from "@/api/client"
@@ -11,10 +11,24 @@ export function LoginPage() {
   const { login } = useAuth()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || !email.trim()) return
+    // noValidate is set on the form, so the handler owns all validation and
+    // surfaces a single accessible message (audit #4) instead of failing silently.
+    if (!name.trim() || !email.trim()) {
+      setError("Enter both your name and email to continue.")
+      return
+    }
+    // Defer the email-format gate to the input's native validity (type="email"),
+    // so accepted addresses match the browser exactly rather than a hand-rolled regex.
+    if (emailRef.current && !emailRef.current.checkValidity()) {
+      setError("Enter a valid email address.")
+      return
+    }
+    setError(null)
     const fakeToken = `demo-${Date.now()}`
     const initials = name.trim().split(/\s+/).map((s) => s[0]).join("").slice(0, 2).toUpperCase()
     const picture = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=16A34A&color=fff`
@@ -30,6 +44,7 @@ export function LoginPage() {
       </div>
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="w-full max-w-md bg-card border border-border rounded-lg shadow-sm p-8"
       >
         <div className="text-center mb-8">
@@ -42,20 +57,32 @@ export function LoginPage() {
           </p>
         </div>
         <div className="space-y-3">
-          <Input
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            autoFocus
-            required
-          />
-          <Input
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="space-y-1">
+            <label htmlFor="login-name" className="text-xs font-medium text-foreground">Name</label>
+            <Input
+              id="login-name"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoFocus
+              required
+            />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="login-email" className="text-xs font-medium text-foreground">Email</label>
+            <Input
+              ref={emailRef}
+              id="login-email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          {error && (
+            <p className="text-xs text-destructive" role="alert">{error}</p>
+          )}
           <Button type="submit" className="w-full">Enter demo</Button>
         </div>
         <p className="text-xs text-muted-foreground text-center mt-4">
