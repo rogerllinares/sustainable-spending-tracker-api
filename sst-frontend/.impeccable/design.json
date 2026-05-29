@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-29T00:00:00Z",
+  "title": "Design System: Sustainable Spending Tracker",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Sustaining Green",
+        "canonical": "#16A34A",
+        "tonalRamp": ["#052e16", "#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#4ade80", "#bbf7d0"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Sprout Green",
+        "canonical": "#4ADE80",
+        "tonalRamp": ["#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#4ade80", "#86efac", "#dcfce7"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#111827",
+        "tonalRamp": ["#0b1120", "#111827", "#1f2937", "#374151", "#64748b", "#94a3b8", "#e5e7eb", "#f8faf9"]
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Field Note Gray",
+        "canonical": "#64748B",
+        "tonalRamp": ["#0b1120", "#1f2937", "#374151", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f1f5f9"]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#F8FAF9",
+        "tonalRamp": ["#0b1120", "#111827", "#1f2937", "#475569", "#94a3b8", "#cbd5e1", "#e5e7eb", "#f8faf9"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Rule Line",
+        "canonical": "#E5E7EB",
+        "tonalRamp": ["#1f2937", "#2a3441", "#374151", "#475569", "#94a3b8", "#cbd5e1", "#e5e7eb", "#f3f4f6"]
+      }
+    },
+    "typographyMeta": {
+      "headline": { "displayName": "Headline", "purpose": "Page and primary card titles. Fixed rem, never fluid." },
+      "title": { "displayName": "Title", "purpose": "Section and secondary card titles." },
+      "body": { "displayName": "Body", "purpose": "Descriptions and prose, capped 65-75ch." },
+      "label": { "displayName": "Label", "purpose": "Mono uppercase column headers and metric keys. Data labels only, never section eyebrows." },
+      "data": { "displayName": "Data", "purpose": "Mono tabular figures: amounts, scores, deltas." }
+    },
+    "shadows": [
+      { "name": "lift", "value": "0 6px 20px rgba(17,24,39,0.08)", "purpose": "Card hover/focus only, paired with translateY(-2px). Signals interactive/selected." },
+      { "name": "action-glow", "value": "0 4px 14px rgba(22,163,74,0.30)", "purpose": "Primary-button hover only. The one place brand green blooms." }
+    ],
+    "motion": [
+      { "name": "ease-out-quart", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Card lift and reveal transitions." },
+      { "name": "duration-state", "value": "150ms", "purpose": "Default for color/background state changes." },
+      { "name": "duration-lift", "value": "180ms", "purpose": "Card hover lift." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "2xl", "value": "1400px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action. Confident and tactile: deepens and glows on hover, presses on active.",
+      "html": "<button class=\"ds-btn-primary\">Ver informe completo</button>",
+      "css": ".ds-btn-primary{appearance:none;border:0;cursor:pointer;font-family:var(--sans,ui-sans-serif,system-ui,sans-serif);font-weight:600;font-size:.875rem;border-radius:4px;height:40px;padding:0 16px;background:#16a34a;color:#fff;display:inline-flex;align-items:center;gap:8px;transition:background .15s ease,transform .12s ease,box-shadow .15s ease}.ds-btn-primary:hover{background:#15912b;box-shadow:0 4px 14px rgba(22,163,74,.30)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:none;box-shadow:0 0 0 2px #f8faf9,0 0 0 4px #16a34a}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action. Paper surface + rule-line border, hovers to a sprout-green-tinted surface.",
+      "html": "<button class=\"ds-btn-outline\">Cancelar</button>",
+      "css": ".ds-btn-outline{appearance:none;cursor:pointer;font-family:var(--sans,ui-sans-serif,system-ui,sans-serif);font-weight:600;font-size:.875rem;border-radius:4px;height:40px;padding:0 16px;background:#f8faf9;color:#111827;border:1px solid #e5e7eb;transition:background .15s ease,border-color .15s ease}.ds-btn-outline:hover{background:#dcfce7;border-color:#bbf7d0}.ds-btn-outline:focus-visible{outline:none;box-shadow:0 0 0 2px #f8faf9,0 0 0 4px #16a34a}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Single-line field. Paper bg, rule-line border, green focus ring, no glow.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Buscar gasto\" />",
+      "css": ".ds-input{font-family:var(--sans,ui-sans-serif,system-ui,sans-serif);font-size:.875rem;height:40px;width:100%;padding:8px 12px;background:#f8faf9;color:#111827;border:1px solid #e5e7eb;border-radius:4px;transition:box-shadow .15s ease,border-color .15s ease}.ds-input::placeholder{color:#64748b}.ds-input:focus-visible{outline:none;border-color:#16a34a;box-shadow:0 0 0 2px #f8faf9,0 0 0 4px #16a34a}.ds-input:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Content surface. Flat at rest (border defines it), lift on hover only.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-k\">HUELLA · MAY 2026</div><div class=\"ds-card-score\">72</div></div>",
+      "css": ".ds-card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:24px;transition:box-shadow .18s cubic-bezier(.22,1,.36,1),transform .18s cubic-bezier(.22,1,.36,1)}.ds-card:hover{box-shadow:0 6px 20px rgba(17,24,39,.08);transform:translateY(-2px)}.ds-card-k{font-family:var(--mono,ui-monospace,monospace);font-size:.66rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:#64748b}.ds-card-score{font-family:var(--mono,ui-monospace,monospace);font-size:2rem;font-weight:600;letter-spacing:-.03em;color:#111827;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "ESG Score Badge",
+      "kind": "chip",
+      "refersTo": "badge-esg-good",
+      "description": "Signature component. Pill chip mapping a 0-100 score to a tone band; ALWAYS shows the number (color never the sole signal).",
+      "html": "<span class=\"ds-esg ds-esg-good\">81</span> <span class=\"ds-esg ds-esg-mid\">54</span> <span class=\"ds-esg ds-esg-bad\">28</span>",
+      "css": ".ds-esg{display:inline-flex;align-items:center;border-radius:999px;border:1px solid;padding:1px 8px;font-family:var(--mono,ui-monospace,monospace);font-size:.72rem;font-weight:600;line-height:1.4;font-variant-numeric:tabular-nums}.ds-esg-good{background:#dcfce7;color:#166534;border-color:#bbf7d0}.ds-esg-mid{background:#fef3c7;color:#92400e;border-color:#fde68a}.ds-esg-bad{background:#fee2e2;color:#991b1b;border-color:#fecaca}"
+    },
+    {
+      "name": "Comparison Delta",
+      "kind": "custom",
+      "refersTo": "data",
+      "description": "Signature voice. Always rendered with its comparison period; green down-arrow for improvement, destructive up-arrow for regression, both with text.",
+      "html": "<span class=\"ds-delta ds-delta-down\">▼ 12% vs abril</span>",
+      "css": ".ds-delta{font-family:var(--mono,ui-monospace,monospace);font-size:.8rem;font-weight:600;font-variant-numeric:tabular-nums}.ds-delta-down{color:#16a34a}.ds-delta-up{color:#dc2626}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Notebook",
+    "overview": "SST is the field notebook of someone observing their own spending: precise, annotated, data-forward, and quietly honest. The numbers are the subject; the interface is the ruled paper they sit on. Monospaced labels and tabular figures give it the feel of an instrument readout, not a marketing dashboard. The notebook has one warm habit: it roots for the reader, printing the full comparison (down 12% vs abril) and, on a good month, a small green ground note. It motivates, it never moralizes.",
+    "keyCharacteristics": [
+      "Data-forward: monospaced figures and labels, tabular alignment, the number is the hero.",
+      "Restrained green, committed where it counts: data viz and primary actions, never decoration.",
+      "Flat at rest, responsive to touch: surfaces defined by borders, depth is a reaction to state.",
+      "One warm note: positive reinforcement and full-context comparisons, nowhere else.",
+      "WCAG 2.1 AA, color never the only signal."
+    ],
+    "rules": [
+      { "name": "The Color-Plus-Number Rule", "body": "Every ESG value shows its number inside the colored chip; color is never the sole carrier of meaning.", "section": "colors" },
+      { "name": "The Committed-Restraint Rule", "body": "Green carries data viz and primary actions and nothing else. It may dominate a chart but never tints chrome, nav, or card backgrounds.", "section": "colors" },
+      { "name": "The Tabular-Numbers Rule", "body": "Every figure in a column or that updates in place uses font-variant-numeric: tabular-nums in the mono face.", "section": "typography" },
+      { "name": "The No-Eyebrow Rule", "body": "Uppercase mono is for data labels and column headers only; never a tracked kicker above section headings.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest; the border is the boundary. A shadow appears only as a response to state.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do render every currency figure, score, and delta in the mono face with tabular-nums.",
+      "Do keep surfaces flat at rest and introduce the Lift shadow only on hover/focus.",
+      "Do show the numeric score inside every ESG chip; color annotates, never carries meaning alone.",
+      "Do write deltas with their comparison period and use the green Ground Note to celebrate a good month.",
+      "Do keep green committed to data viz and primary actions; let it dominate a chart, never the chrome.",
+      "Do verify body and placeholder text hits 4.5:1 in both light and dark mode.",
+      "Do give every animation a prefers-reduced-motion: reduce fallback."
+    ],
+    "donts": [
+      "Don't use crypto-bro neon: no neon gradients, no glassmorphism-by-default, no gradient text, no purple glow.",
+      "Don't drift toward the rigid corporate bank: no navy-and-gold, no stock smiling-people photos, no cold legal-dense walls of text.",
+      "Don't use the saturated AI default cream/sand/beige body background.",
+      "Don't build the hero-metric template or endless identical card grids.",
+      "Don't put a tracked uppercase eyebrow above sections; uppercase mono is for data labels only.",
+      "Don't use border-left/border-right > 1px as a colored accent stripe.",
+      "Don't tint chrome, nav, or card backgrounds green.",
+      "Don't signal error with a red border alone; always pair with a text message."
+    ]
+  }
+}
