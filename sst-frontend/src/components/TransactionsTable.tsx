@@ -117,7 +117,8 @@ export function TransactionsTable() {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
+              {/* DESIGN.md sec.3 label token: mono, uppercase, tracked — column headers only */}
+              <TableRow className="font-mono text-[0.66rem] uppercase tracking-[0.04em]">
                 <TableHead>Date</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
@@ -149,7 +150,7 @@ export function TransactionsTable() {
               )}
               {!txns.isError && txns.data?.content.map((t) => (
                 <TableRow key={t.id}>
-                  <TableCell className="font-mono text-xs">{t.date.slice(0, 10)}</TableCell>
+                  <TableCell className="font-mono text-xs tabular-nums">{t.date.slice(0, 10)}</TableCell>
                   <TableCell>
                     <div className="font-medium">{t.merchantName ?? t.description}</div>
                     {t.merchantName && (
@@ -158,8 +159,8 @@ export function TransactionsTable() {
                     <div className="md:hidden text-xs text-muted-foreground mt-0.5">{t.category}</div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground">{t.category}</TableCell>
-                  <TableCell className="text-right font-medium">{t.amount.toFixed(2)}</TableCell>
-                  <TableCell className="text-right">{t.co2Kg.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono font-medium tabular-nums">{t.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-mono tabular-nums">{t.co2Kg.toFixed(2)}</TableCell>
                   <TableCell className="text-right"><EsgBadge score={t.esgScore} /></TableCell>
                 </TableRow>
               ))}
