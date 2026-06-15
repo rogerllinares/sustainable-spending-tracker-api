@@ -1,8 +1,8 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-05-05
+**Original analysis:** 2026-05-05 · **Refreshed:** 2026-06-15
 
-> Code analyzed lives in worktree `.worktrees/feature-backend/`. The `main` branch only contains the Spring Boot scaffold (no controllers/services/migrations). All file paths below are relative to `sst/.worktrees/feature-backend/` unless noted.
+> Snapshot of known technical debt and conscious limitations in the current `master` tree. This list is kept deliberately as portfolio/interview material — it documents trade-offs made on purpose (mock auth, in-memory dashboard aggregation, single-tenant model) rather than hiding them. File paths are relative to the repo root.
 
 ## Tech Debt
 
@@ -11,12 +11,6 @@
 - Files: `src/main/kotlin/com/rogerllina/sst/service/TransactionService.kt:41`, `src/main/kotlin/com/rogerllina/sst/service/TransactionService.kt:82`
 - Impact: Frontend cannot reliably distinguish "not found" vs server crash; no contract for error shape; leaks stack traces in dev.
 - Fix approach: Add `GlobalExceptionHandler` (`@RestControllerAdvice`) mapping `NoSuchElementException → 404`, `IllegalStateException/IllegalArgumentException → 400`, validation errors → 400 with field map.
-
-**`AccountController` returns JPA entity directly:**
-- Issue: `AccountController.getAll()` exposes the `Account` entity instead of a DTO. Other controllers (`TransactionController`, `DashboardController`) follow the DTO pattern, this one breaks the convention.
-- Files: `src/main/kotlin/com/rogerllina/sst/controller/AccountController.kt:13-14`
-- Impact: Tight coupling between API contract and persistence model; future schema changes leak through API; serialization may pull lazy associations (currently none, but fragile).
-- Fix approach: Add `AccountDto` with `from(Account)` companion, mirror the pattern from `TransactionDto`.
 
 **Dashboard loads all transactions into memory:**
 - Issue: `DashboardService.getSummary()` and `getCategories()` call `transactionRepository.findAll()` then aggregate in Kotlin (groupBy, fold). With 90 seeded rows this is fine; with real bank data (thousands per user/year) this is O(n) JVM work per request and full table scan per call.
@@ -160,19 +154,7 @@
 
 ## Missing Critical Features
 
-**No Dockerfile:**
-- Problem: No `Dockerfile`, no `docker-compose.yml` at worktree root.
-- Blocks: Cannot deploy to Railway/Fly.io as planned in `CLAUDE.md`. Cannot run reproducible local Postgres for integration tests.
-- Files: Worktree root `c:/Users/llina/Desktop/SecondBrain/03 Projects/Proyectos Prioritarios/Sustainable Spending Tracker/sst/.worktrees/feature-backend/`.
-
-**No CI pipeline:**
-- Problem: No `.github/workflows/` directory.
-- Blocks: PRs merge without automated build/test gate. Regressions land silently.
-- Recommendation: Add `ci.yml` running `./gradlew test` on push/PR.
-
-**No README:**
-- Problem: Worktree has only `HELP.md` (Spring Initializr default).
-- Blocks: New contributor (or future Claude session) has no entry point — must read CLAUDE.md plus reverse-engineer build/run steps.
+> **Resolved since the original analysis:** `Dockerfile` + `docker-compose.yml` (multi-stage build), a portfolio-grade `README.md`, and a GitHub Actions CI pipeline (`.github/workflows/ci.yml`, runs `./gradlew test` + frontend Vitest on every push/PR) all exist now.
 
 **No production profile:**
 - Problem: Only `application.yml` (dev defaults) and `application-test.yml`. No `application-prod.yml`.
@@ -211,4 +193,4 @@
 
 ---
 
-*Concerns audit: 2026-05-05*
+*Concerns audit: 2026-05-05 · refreshed 2026-06-15 (reconciled against the current `master` tree).*
