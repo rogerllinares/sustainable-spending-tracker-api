@@ -6,7 +6,8 @@ services:
     plan: free
     branch: master
     healthCheckPath: /actuator/health
-    autoDeploy: true
+    # Manual deploy only — keep free-tier quota for intentional deploys (project policy).
+    autoDeploy: false
     envVars:
       - key: DATABASE_URL
         sync: false
