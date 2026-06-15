@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Backend](https://img.shields.io/badge/backend-Kotlin%20%2B%20Spring%20Boot-7F52FF)
 ![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20TypeScript-61DAFB)
-![Tests](https://img.shields.io/badge/tests-18%20backend%20%2B%2013%20frontend-success)
+![Tests](https://img.shields.io/badge/tests-18%20backend%20%2B%2016%20frontend-success)
 
 Turn bank transactions into a carbon footprint + ESG score per purchase. Full-stack portfolio piece — Kotlin/Spring Boot backend, React/TypeScript dashboard, deployed on Render + Vercel + Supabase.
 
@@ -13,7 +13,7 @@ Turn bank transactions into a carbon footprint + ESG score per purchase. Full-st
 
 > ⏱ **Cold start:** Render free tier sleeps after 15 min idle. The first request after a cold start takes ~50s — the dashboard shows a skeleton while it wakes up.
 
-**Status:** shipped (2026-05-12, hardened 2026-05-18) — frontend + backend live, 4-dimension audits passed (UI/Code/CSO/SEO + Karpathy), 18/18 backend gradle tests green, **13/13 frontend Vitest tests green**, dark mode + mobile responsive.
+**Status:** shipped (2026-05-12, hardened 2026-05-18) — frontend + backend live, 4-dimension audits passed (UI/Code/CSO/SEO + Karpathy), 18/18 backend gradle tests green, **16/16 frontend Vitest tests green**, dark mode + mobile responsive.
 
 ## Endpoints
 
