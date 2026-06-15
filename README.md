@@ -106,4 +106,4 @@ sst/
 - Move dashboard aggregation from in-memory to SQL `GROUP BY` (current implementation is correct but does not scale beyond ~10k transactions).
 - Code-split the Recharts bundle (currently ~210 KB gzipped initial chunk).
 - Real emission factors via an audited dataset (e.g. Carbon Cloud, Klima) and merchant-level overrides instead of MCC-only.
-- CI/CD via GitHub Actions (`npm test && npm run build && vercel deploy` on push to `master`).
+- **CD (auto-deploy):** CI already runs the backend + frontend tests on every push/PR (see the badge above). The remaining piece is auto-deploy on merge — kept manual on purpose to preserve Render/Vercel free-tier quota.
