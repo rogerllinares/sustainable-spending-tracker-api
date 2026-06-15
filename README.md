@@ -1,5 +1,6 @@
 # Sustainable Spending Tracker (SST)
 
+[![CI](https://github.com/rogerllinares/sustainable-spending-tracker-api/actions/workflows/ci.yml/badge.svg)](https://github.com/rogerllinares/sustainable-spending-tracker-api/actions/workflows/ci.yml)
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://sst-frontend-steel.vercel.app)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Backend](https://img.shields.io/badge/backend-Kotlin%20%2B%20Spring%20Boot-7F52FF)
