@@ -1,5 +1,52 @@
 import { describe, it, expect } from 'vitest'
-import { cn, latestMonthIndex } from './utils'
+import { cn, latestMonthIndex, computeMonthlyDelta } from './utils'
+
+describe('computeMonthlyDelta', () => {
+  it('returns null with fewer than two months', () => {
+    expect(computeMonthlyDelta([])).toBeNull()
+    expect(computeMonthlyDelta([{ month: '2026-04', co2Kg: 12 }])).toBeNull()
+  })
+
+  it('reports a decrease as an improvement (down)', () => {
+    const d = computeMonthlyDelta([
+      { month: '2026-03', co2Kg: 100 },
+      { month: '2026-04', co2Kg: 88 },
+    ])
+    expect(d).toEqual({ pct: 12, direction: 'down', previousMonth: '2026-03' })
+  })
+
+  it('reports an increase as a regression (up)', () => {
+    const d = computeMonthlyDelta([
+      { month: '2026-03', co2Kg: 100 },
+      { month: '2026-04', co2Kg: 125 },
+    ])
+    expect(d).toEqual({ pct: 25, direction: 'up', previousMonth: '2026-03' })
+  })
+
+  it('reports an unchanged month as flat (0%)', () => {
+    const d = computeMonthlyDelta([
+      { month: '2026-03', co2Kg: 50 },
+      { month: '2026-04', co2Kg: 50 },
+    ])
+    expect(d).toEqual({ pct: 0, direction: 'flat', previousMonth: '2026-03' })
+  })
+
+  it('uses the two most recent months even when unsorted', () => {
+    const d = computeMonthlyDelta([
+      { month: '2026-04', co2Kg: 80 },
+      { month: '2026-01', co2Kg: 10 },
+      { month: '2026-03', co2Kg: 100 },
+    ])
+    expect(d).toEqual({ pct: 20, direction: 'down', previousMonth: '2026-03' })
+  })
+
+  it('returns null when the previous month is zero (no defined % change)', () => {
+    expect(computeMonthlyDelta([
+      { month: '2026-03', co2Kg: 0 },
+      { month: '2026-04', co2Kg: 12 },
+    ])).toBeNull()
+  })
+})
 
 describe('latestMonthIndex', () => {
   it('returns -1 for an empty series', () => {
