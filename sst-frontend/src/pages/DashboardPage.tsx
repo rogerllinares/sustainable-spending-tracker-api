@@ -26,7 +26,7 @@ export function DashboardPage() {
             <h1 className="text-base md:text-xl font-semibold text-foreground">Sustainable Spending Tracker</h1>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
-            {picture && <img src={picture} alt={name ?? ""} className="h-8 w-8 rounded-full" />}
+            {picture && <img src={picture} alt={name ?? ""} width={32} height={32} className="h-8 w-8 rounded-full" />}
             <span className="hidden sm:inline text-sm text-foreground">{name}</span>
             <ThemeToggle />
             <Button variant="outline" size="sm" onClick={handleLogout}>Sign out</Button>
