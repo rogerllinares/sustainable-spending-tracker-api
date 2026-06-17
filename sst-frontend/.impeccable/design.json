@@ -7,7 +7,7 @@
       "primary": {
         "role": "primary",
         "displayName": "Sustaining Green",
-        "canonical": "#16A34A",
+        "canonical": "#15803D",
         "tonalRamp": ["#052e16", "#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#4ade80", "#bbf7d0"]
       },
       "accent": {

@@ -2,7 +2,7 @@
 name: Sustainable Spending Tracker
 description: A calm, data-forward field notebook for your spending's environmental footprint.
 colors:
-  primary: "#16A34A"
+  primary: "#15803D"
   primary-dark: "#22C55E"
   accent: "#4ADE80"
   bg: "#F8FAF9"
@@ -127,7 +127,7 @@ This system explicitly rejects **crypto-bro neon** (no neon gradients, no glassm
 A near-neutral paper canvas with a single committed green that carries both meaning (sustainability) and action, plus a three-stop ESG scale that always pairs color with a number.
 
 ### Primary
-- **Sustaining Green** (`#16A34A`, green-600; dark mode `#22C55E`, green-500 for contrast): primary actions, current selection, the active data point in a series, focus rings. The semantic color of sustainability. Defined as `--primary` / `--ring`.
+- **Sustaining Green** (`--primary` = `#15803D`, green-700; dark mode `#22C55E`, green-500 with dark `--primary-foreground`): primary actions, current selection, the active data point in a series, focus rings. The semantic color of sustainability. green-700 (not the lighter green-600 `#16A34A`) is the implemented primary so white text on it clears WCAG AA 4.5:1 (green-600 was 3.3:1); green-600 survives only as the brand-family identity reference.
 - **Sprout Green** (`#4ADE80`, green-400): the `--accent`, reserved for hover surfaces on ghost/outline controls and subtle highlight fills. Never a second primary.
 
 ### Neutral
@@ -146,6 +146,8 @@ A near-neutral paper canvas with a single committed green that carries both mean
 **The Color-Plus-Number Rule.** Every ESG value shows its number inside the colored chip; color is never the sole carrier of meaning. A grayscale print or a colorblind reader must still read the score. Forbidden: a bare colored dot or background with no figure.
 
 **The Committed-Restraint Rule.** Green carries data viz and primary actions and nothing else. It is allowed to dominate a chart (that is the data speaking) but it never tints chrome, nav, or card backgrounds. If green appears as decoration, it is wrong.
+
+**The AA-Contrast Rule.** Any text-bearing green surface must clear WCAG AA (4.5:1). Light mode uses green-700 `#15803D` with white text (5.0:1); dark mode keeps vivid green-500 `#22C55E` but flips text to ink `#111827` (~7.5:1). Never put white text on green-600/green-500. The generated avatar uses the same `#15803D` background for the same reason.
 
 ## 3. Typography
 
