@@ -1,10 +1,39 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { useDashboardSummary } from "@/api/dashboard"
+import { latestMonthIndex } from "@/lib/utils"
 
 export function TrendChart() {
   const summary = useDashboardSummary()
+  const trend = summary.data?.monthlyTrend ?? []
+  const currentIdx = latestMonthIndex(trend)
+
+  // Mark the current month on its axis label with a ▸ glyph + bold weight, so
+  // the emphasis does not rely on the bar colour alone (DESIGN.md AA rule).
+  const currentMonth = trend[currentIdx]?.month
+  const renderMonthTick = ({ x, y, payload }: {
+    x?: number | string; y?: number | string; payload?: { value?: string }
+  }) => {
+    // Match on the month value, not the tick index: Recharts re-indexes ticks
+    // when it skips labels on narrow widths, so an index compare would mark the
+    // wrong month (codex review #23). The bar <Cell> uses the data index safely.
+    const isCurrent = payload?.value != null && payload.value === currentMonth
+    return (
+      <text
+        x={x}
+        y={y}
+        dy={12}
+        textAnchor="middle"
+        fontFamily="ui-monospace, monospace"
+        fontSize={11}
+        fontWeight={isCurrent ? 700 : 400}
+        fill={isCurrent ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"}
+      >
+        {isCurrent ? `▸ ${payload?.value}` : payload?.value}
+      </text>
+    )
+  }
 
   return (
     <Card>
@@ -30,9 +59,9 @@ export function TrendChart() {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={summary.data?.monthlyTrend ?? []} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
+              <BarChart data={trend} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} tick={{ fontFamily: "ui-monospace, monospace" }} />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} tick={renderMonthTick} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tick={{ fontFamily: "ui-monospace, monospace" }} />
                 <Tooltip
                   contentStyle={{
@@ -46,7 +75,14 @@ export function TrendChart() {
                   cursor={{ fill: "hsl(var(--muted) / 0.3)" }}
                   formatter={(value) => [`${Number(value).toFixed(1)} kg`, "CO₂"]}
                 />
-                <Bar dataKey="co2Kg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="co2Kg" radius={[6, 6, 0, 0]}>
+                  {trend.map((point, i) => (
+                    <Cell
+                      key={point.month}
+                      fill={i === currentIdx ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.4)"}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           )}
