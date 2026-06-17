@@ -31,7 +31,9 @@ export function LoginPage() {
     setError(null)
     const fakeToken = `demo-${Date.now()}`
     const initials = name.trim().split(/\s+/).map((s) => s[0]).join("").slice(0, 2).toUpperCase()
-    const picture = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=16A34A&color=fff`
+    // background = green-700 #15803D (the WCAG-AA primary, DESIGN.md sec.1) so the
+    // white initials clear 4.5:1, matching the accessible CTA — not the lighter brand-600.
+    const picture = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=15803D&color=fff`
     login(fakeToken, { email: email.trim(), name: name.trim(), picture })
     setAuthToken(fakeToken)
     navigate("/dashboard", { replace: true })
