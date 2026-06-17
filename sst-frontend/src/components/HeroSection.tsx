@@ -1,6 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { useDashboardSummary, useCategories } from "@/api/dashboard"
+import { computeMonthlyDelta } from "@/lib/utils"
 import { EsgBadge } from "./EsgBadge"
+
+const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+// Format an ISO "YYYY-MM" as a short English month, avoiding Date() timezone
+// pitfalls by indexing the month number directly.
+function monthLabel(iso: string): string {
+  return MONTH_LABELS[Number(iso.split("-")[1]) - 1] ?? iso
+}
 
 export function HeroSection() {
   const summary = useDashboardSummary()
@@ -37,6 +46,7 @@ export function HeroSection() {
   }
 
   const topCategory = categories.data?.[0]?.category ?? "—"
+  const delta = computeMonthlyDelta(summary.data.monthlyTrend)
 
   // Asymmetric layout (DESIGN.md sec.1/sec.6): lead with the primary footprint
   // number, demote the other two — NOT the banned identical-card / hero-metric grid.
@@ -56,6 +66,22 @@ export function HeroSection() {
           <p className="mt-3 max-w-[60ch] text-sm text-muted-foreground">
             Most of it comes from <span className="font-medium text-foreground">{topCategory}</span>.
           </p>
+          {delta && delta.direction !== "flat" && (
+            <p
+              className={`mt-3 font-mono text-sm font-semibold tabular-nums ${
+                delta.direction === "down" ? "text-primary" : "text-destructive"
+              }`}
+            >
+              {delta.direction === "down" ? "▼" : "▲"} {delta.pct}% vs {monthLabel(delta.previousMonth)}
+            </p>
+          )}
+          {/* Ground Note: the one warm line, shown only on an improving month —
+              motivates, never moralizes (DESIGN.md narrative). */}
+          {delta?.direction === "down" && (
+            <p className="mt-2 max-w-[60ch] text-sm text-primary">
+              A lighter footprint than last month.
+            </p>
+          )}
         </CardContent>
       </Card>
 
