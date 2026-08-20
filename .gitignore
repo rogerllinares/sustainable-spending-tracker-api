@@ -26,3 +26,7 @@ gradle-app.setting
 
 # Worktrees
 .worktrees/
+
+# Local-only dev overrides (CORS + ADMIN_TOKEN for local docker run)
+docker-compose.override.yml
+.vercel
